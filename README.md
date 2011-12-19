@@ -1,15 +1,16 @@
-git-show
-========
+Emacs git-show
+==============
 
-## git-show(1) + Emacs
+## git-show(1) + Emacs(1)
 
 **FAST** and descriptive file search throughout your git(1) repo's
   history.
 
-This mode exists to allow [Emacs](http://www.gnu.org/software/emacs/)
-execute git-show(1) processes dumping the results into a buffer
-attempting to use its same mode. For example; if it's a shell script, it
-will open the new buffer using sh-mode.
+This mode exists to allow
+[emacs(1)](http://www.gnu.org/software/emacs/) execute git-show(1)
+processes dumping the results into a buffer attempting to use its same
+mode. For example; if the requested file is a shell script, it will
+open the new buffer is sh-mode.
 
 ## Functions:
 
@@ -37,6 +38,6 @@ In your emacs config:
     (add-to-list 'load-path "~/.emacs.d/load/path/git-show.el")
     (require 'git-show)
 
-## TODO / Thoughts
+## TODO / Thoughts:
 
 ![Wonka](https://github.com/jpablobr/git-show/raw/master/wonka.gif)
