@@ -24,7 +24,8 @@ will also display them using their defined modes (via
 
     M-x git-show-rm-tmp
 
-Removes the temp directory `/tmp/git-show/`
+Removes the temp directory `/tmp/git-show/` (where temp files are
+stored).
 
 ## Screencast:
 
