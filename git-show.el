@@ -58,7 +58,7 @@
   :type 'string)
 
 (defcustom git-show/tmp-dir
-	"/tmp/git-show/"
+  "/tmp/git-show/"
   "Git show temp directory."
   :group 'git-show
   :type 'string)
@@ -79,16 +79,16 @@
 ;;;
 (defun git-show/tmp-file (sha candidate)
   "Creates the temp file name for the git-show-file function."
-	(concat sha ":" (replace-regexp-in-string  ".*/" "" candidate)))
+  (concat sha ":" (replace-regexp-in-string  ".*/" "" candidate)))
 
 (defun git-show/tmp-file-full-path (tmp-file)
   "Adds the `git-show/tmp-dir' directory to the tmp-file name. "
-	(concat git-show/tmp-dir tmp-file))
+  (concat git-show/tmp-dir tmp-file))
 
 (defun git-show/show-cmd (sha candidate tmp-file-path)
   "Creates the string for the git-show command."
-	(concat git-show/git-exec
-					"show " sha ":" candidate " >" tmp-file-path))
+  (concat git-show/git-exec
+          "show " sha ":" candidate " >" tmp-file-path))
 
 (defun git-show/find-git-repo (dir)
   "Recursively search for a .git/ directory."
@@ -109,12 +109,12 @@
 (defun git-show/make-tmp-dir ()
   "Test if the temp directory exists, if not it creates it."
   (interactive)
-	(if (not (file-exists-p git-show/tmp-dir))
-			(make-directory git-show/tmp-dir)))
+  (if (not (file-exists-p git-show/tmp-dir))
+      (make-directory git-show/tmp-dir)))
 
 (defun git-show/mode-line (commit-msg)
   "Display the context on which the file is being searched."
-	(concat "[Context: " commit-msg "]"))
+  (concat "[Context: " commit-msg "]"))
 
 (defun git-show/sha ()
   "Used internally to get the SHA for rendering the files properly via
@@ -125,7 +125,7 @@
      ;; results seem to be getting cached or something... I don't know
      ;; how to refresh it. ATM if this is executed in a different
      ;; repo, it will render the git-log(1) of the first one!.
-		 (candidates . git-show/sha-init)
+     (candidates . git-show/sha-init)
      (candidate-number-limit . 9999)
      (candidates-in-buffer)
      (action . (lambda (candidate) candidate)))
@@ -139,11 +139,11 @@
         '(" " mode-line-buffer-identification " "
           (line-number-mode "%l") " "
           (:eval (propertize "(Git Show Process Running) "
-														 'face '((:foreground "red"))))))
-	(setq cmd
-				(concat git-show/git-exec git-show/sha-command))
+                             'face '((:foreground "red"))))))
+  (setq cmd
+        (concat git-show/git-exec git-show/sha-command))
   (prog1
-			(start-process-shell-command "git-show-process" nil cmd)
+      (start-process-shell-command "git-show-process" nil cmd)
 
     (set-process-sentinel (get-process "git-show-process")
                           #'(lambda (process event)
@@ -160,9 +160,9 @@
   "Use the initially used SHA for listing the files and search for a
   specific one to display its content."
   (interactive)
-	(setq sha-msg (git-show/sha))
+  (setq sha-msg (git-show/sha))
   (setq sha (replace-regexp-in-string " .*" "" sha-msg))
-	(setq git-show-mode-line (git-show/mode-line sha-msg))
+  (setq git-show-mode-line (git-show/mode-line sha-msg))
   (anything-other-buffer
    '((name . "Get file")
      (init
@@ -173,28 +173,28 @@
                         sha))
           (call-process-shell-command
            cmd nil (anything-candidate-buffer 'global))))
-		 (type . string)
-		 (mode-line . git-show-mode-line)
+     (type . string)
+     (mode-line . git-show-mode-line)
      (candidate-number-limit . 9999)
      (candidates-in-buffer)
      (action . (lambda (candidate)
-								 (kill-local-variable 'mode-line-format)
+                 (kill-local-variable 'mode-line-format)
                  (setq tmp-file (git-show/tmp-file sha candidate))
                  (setq tmp-file-path (git-show/tmp-file-full-path tmp-file))
                  (setq show-cmd (git-show/show-cmd
-																 sha
-																 candidate
-																 tmp-file-path))
-								 (git-show/make-tmp-dir)
-								 (call-process-shell-command show-cmd)
+                                 sha
+                                 candidate
+                                 tmp-file-path))
+                 (git-show/make-tmp-dir)
+                 (call-process-shell-command show-cmd)
                  (find-file tmp-file-path)
-								 (setq mode-line-format
-								 			 '(" " mode-line-buffer-identification " "
-								 				 (:eval (propertize
-																 (replace-regexp-in-string
-																	"\\([0-9a-fA-F]\\{7\\}\\)" "" sha-msg)
-																 'face '((:foreground "yellow"))))))
-								 (when (fboundp 'redraw-modeline) (redraw-modeline)))))
+                 (setq mode-line-format
+                       '(" " mode-line-buffer-identification " "
+                         (:eval (propertize
+                                 (replace-regexp-in-string
+                                  "\\([0-9a-fA-F]\\{7\\}\\)" "" sha-msg)
+                                 'face '((:foreground "yellow"))))))
+                 (when (fboundp 'redraw-modeline) (redraw-modeline)))))
    "*Git Show*")); TODO: Clean this up...
 
 ;;;###autoload
@@ -218,8 +218,8 @@
 (defun git-show-rm-tmp ()
   "Removes `git-show/tmp-dir' directory"
   (interactive)
-	(if (file-exists-p git-show/tmp-dir)
-			(delete-directory git-show/tmp-dir t)))
+  (if (file-exists-p git-show/tmp-dir)
+      (delete-directory git-show/tmp-dir t)))
 
 (provide 'git-show)
 ;; git-show.el ends here
