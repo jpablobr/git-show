@@ -70,15 +70,11 @@
   "cd %s && git ls-tree --name-only -r %s "
   "Git show ls-tree command.")
 
-(defvar git-show/ls-files
-  "cd %s && git ls-files"
-  "Git show ls-files for git-show function.")
-
 ;;; --------------------------------------------------------------------
 ;;; - Helpers
 ;;;
 (defun git-show/tmp-file (sha candidate)
-  "Creates the temp file name for the git-show-file function."
+  "Creates the temp file name for the git-show function."
   (concat sha ":" (replace-regexp-in-string  ".*/" "" candidate)))
 
 (defun git-show/tmp-file-full-path (tmp-file)
@@ -97,14 +93,6 @@
     (if (file-exists-p (expand-file-name ".git/" dir))
         dir
       (git-show/find-git-repo (expand-file-name "../" dir)))))
-
-(defun git-show/goto  (file-content)
-  "Visit the source for the file result."
-  (funcall 'find-file
-           (expand-file-name file-content
-                             (expand-file-name
-                              (git-show/find-git-repo file-content)
-                              (anything-attr 'pwd)))))
 
 (defun git-show/make-tmp-dir ()
   "Test if the temp directory exists, if not it creates it."
@@ -156,7 +144,7 @@
 ;;; - Interctive Functions
 ;;;
 ;;;###autoload
-(defun git-show-file ()
+(defun git-show ()
   "Use the initially used SHA for listing the files and search for a
   specific one to display its content."
   (interactive)
@@ -196,23 +184,6 @@
                                  'face '((:foreground "yellow"))))))
                  (when (fboundp 'redraw-modeline) (redraw-modeline)))))
    "*Git Show*")); TODO: Clean this up...
-
-;;;###autoload
-(defun git-show ()
-  "Find a file from current git repo."
-  (interactive)
-  (anything-other-buffer
-   '((name . "Git Show")
-     (init
-      . (lambda ()
-          (call-process-shell-command
-           (format git-show/ls-files
-                   (git-show/find-git-repo default-directory))
-           nil (anything-candidate-buffer 'global))))
-     (candidate-number-limit . 9999)
-     (candidates-in-buffer)
-     (action . git-show/goto))
-   "*Git Show*"))
 
 ;;;###autoload
 (defun git-show-rm-tmp ()

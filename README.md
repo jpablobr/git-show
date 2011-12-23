@@ -14,10 +14,6 @@ open the new buffer is sh-mode.
 
     M-x git-show
 
-Indexes current git(1) repo via git-ls-tree(1) making it super FAST.
-
-    M-x git-show-file
-
 Searches for files from the git(1) repos history using their SHAs and
 will also display them using their defined modes (via
 `auto-mode-alist` var).
