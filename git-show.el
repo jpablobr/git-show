@@ -19,7 +19,7 @@
 
 ;; Requirements:
 
-;; http://www.emacswiki.org/emacs/Anything
+;; http://www.emacswiki.org/emacs/Helm
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -40,7 +40,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'anything)
+(require 'helm)
 
 ;;; --------------------------------------------------------------------
 ;;; - Customization
@@ -107,7 +107,7 @@
 (defun git-show/sha ()
   "Used internally to get the SHA for rendering the files properly via
   the git-ls-tree utility."
-  (anything-other-buffer
+  (helm-other-buffer
    '((name . "Get SHA")
      ;; TODO: Refresh search if executed in a new repo context,
      ;; results seem to be getting cached or something... I don't know
@@ -137,8 +137,8 @@
                           #'(lambda (process event)
                               (when (string= event "finished\n")
                                 (kill-local-variable 'mode-line-format)
-                                (with-anything-window
-                                  (anything-update-move-first-line)))))))
+                                (with-helm-window
+                                  (helm-update-move-first-line)))))))
 
 ;;; --------------------------------------------------------------------
 ;;; - Interctive Functions
@@ -151,7 +151,7 @@
   (setq sha-msg (git-show/sha))
   (setq sha (replace-regexp-in-string " .*" "" sha-msg))
   (setq git-show-mode-line (git-show/mode-line sha-msg))
-  (anything-other-buffer
+  (helm-other-buffer
    '((name . "Get file")
      (init
       . (lambda ()
@@ -160,7 +160,7 @@
                         (git-show/find-git-repo default-directory)
                         sha))
           (call-process-shell-command
-           cmd nil (anything-candidate-buffer 'global))))
+           cmd nil (helm-candidate-buffer 'global))))
      (type . string)
      (mode-line . git-show-mode-line)
      (candidate-number-limit . 9999)
